@@ -11,7 +11,7 @@ ROLE_PLAYERS_MAP: Dict[str, List[str]] = {
     "Support": ['Keria', 'Delight', 'Duro', 'Peter', 'ON', 'Kael', 'Hang', 'Meiko', 'Busio', 'Trymbi', 'Eyla', 'Labrov', 'Alvaro', 'Mikyx', 'Kaiwing', 'Taki', 'Woody'],
     "All": [
         'Faker', 'Chovy', 'Zeka', 'Bdd', 'Knight', 'Shanks', 'Creme', 'RooKie', 'Poby', 'Caps', 'jojopyun', 'Quad', 'Mireu', 'Quid', 'HongQ', 'Maple', 'Dire',
-        'Oner', 'Canyon', 'Peanut', 'Cuzz', 'Beichuan', 'Shadow', 'Tarzan', 'Kanavi', 'Wei', 'Inspired', 'Disamis', 'River', 'SkewMond', 'Razork', 'Elyoya', 'JunJia', 'Hizto', 'Karsa',
+        'Oner', 'Canyon', 'Peanut', 'Cuzz', 'Beichuan', 'Shad0w', 'Tarzan', 'Kanavi', 'Wei', 'Inspired', 'Disamis', 'River', 'SkewMond', 'Razork', 'Elyoya', 'JunJia', 'Hizto', 'Karsa',
         'Doran', 'Kiin', 'PerfecT', 'Zeus', 'TheShy', 'Bin', 'Flandre', '369', 'Brokenblade', 'Oscarinin', 'Myrwn', 'Gakgos', 'Bwipo', 'Boal', 'Dhokla', 'Driver', 'Rest', 'Hiro02', 'Pun', 'Azhi',
         'Ruler', 'Gumayusi', 'Viper', 'deokdam', 'Elk', 'Hope', 'JackeyLove', 'GALA', 'Massu', 'FBI', 'Morttheus', 'Upset', 'Hans Sama', 'Supa', 'Doggo', 'Eddie', 'Betty',
         'Keria', 'Delight', 'Duro', 'Peter', 'ON', 'Kael', 'Hang', 'Busio', 'Trymbi', 'Eyla', 'Labrov', 'Alvaro', 'Mikyx', 'Kaiwing', 'Taki', 'Woody'
