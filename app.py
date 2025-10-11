@@ -107,8 +107,9 @@ def main():
 
     # Get the Database Engine
     engine = get_db_engine()
-    st.error("Cannot proceed without a successful database connection.")
-    return
+    if engine is None:
+        st.error("Cannot proceed without a successful database connection.")
+        return
 
     # Role Selector
     role_options = list(ROLE_PLAYERS_MAP.keys())
