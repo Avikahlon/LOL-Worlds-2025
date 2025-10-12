@@ -82,7 +82,7 @@ def compare_page(df: pd.DataFrame):
             # Prepare a display table with only the most relevant columns
             ind_game_wins_a = 0
             ind_game_wins_b = 0
-
+            scores = []
             # Iterate through the matches to aggregate individual game scores
             for _, row in h2h_data.iterrows():
                 # Case 1: Team A is team1 in the match
@@ -102,8 +102,9 @@ def compare_page(df: pd.DataFrame):
                     score_b = row['team1_score']
 
                 score  = f"{team_a} {score_a} - {score_b} {team_b}"
+                scores.append(score)
 
-                h2h_data['H2H Score'] = score
+            h2h_data['H2H Score'] = scores
 
             # Simple H2H record summary
             wins_a = (h2h_data['winner'] == team_a).sum()

@@ -181,6 +181,7 @@ def load_and_prepare_data(engine: Engine, selected_role: str, selected_split: st
 
     return df_cleaned
 
+
 def load_match_data(engine):
 
     names_list_str = ', '.join([f"'{name}'" for name in TEAM_MAP])
