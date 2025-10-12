@@ -205,6 +205,7 @@ def main():
 
     elif options == "Teams Page":
         st.header("Teams Page")
+        st.warning("Select a split other than ALL to see charts")
         show_team_performance_charts(df_teams)
 
     elif options == "Future Additions":
