@@ -151,6 +151,7 @@ def main():
         "Early Game & Vision Control",
         "Player Origins",
         "Other charts",
+        "Teams Page",
         "Pickems Analysis",
         "Future Additions"
     ])
@@ -202,8 +203,8 @@ def main():
         st.header("My Pickems")
         show_pickems_page(df_filtered, engine)
 
-    elif options == "Teams Overview":
-        st.header("Teams Overview")
+    elif options == "Teams Page":
+        st.header("Teams Page")
         show_team_performance_charts(df_teams)
 
     elif options == "Future Additions":
