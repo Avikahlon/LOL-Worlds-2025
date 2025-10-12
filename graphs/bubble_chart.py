@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
-
+import numpy as np
 
 def plot_single_bubble_chart(df: pd.DataFrame, x: str, y: str, size: str, title: str, xlabel: str, ylabel: str):
     """Helper function to plot a single bubble chart."""
@@ -18,6 +18,7 @@ def plot_single_bubble_chart(df: pd.DataFrame, x: str, y: str, size: str, title:
 
 
 def show_bubble_charts(df: pd.DataFrame, selected_role: str):
+
     """Displays three bubble charts: Winrate vs KDA, Winrate vs Games, KDA vs Games."""
 
     if selected_role.upper() == 'ALL':

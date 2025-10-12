@@ -18,6 +18,13 @@ ROLE_PLAYERS_MAP: Dict[str, List[str]] = {
     ],
 }
 
+TEAM_MAP = [
+        'Gen.G eSports', 'T1', 'KT Rolster', 'Hanwha Life eSports',
+        'Bilibili Gaming', 'Top Esports', 'Anyone s Legend', 'Invictus Gaming',
+        'G2 Esports', 'Fnatic', 'Movistar KOI', '100 Thieves', 'FlyQuest',
+        'Vivo Keyd Stars', 'Team Secret Whales', 'CTBC Flying Oysters', 'PSG Talon'
+]
+
 # @st.cache_data
 def load_team_map():
     """Loads and caches the player-team-league mapping from player_team_map.csv."""
@@ -35,6 +42,47 @@ def load_team_map():
     except Exception as e:
         st.error(f"Error loading player_team_map.csv: {e}")
         return pd.DataFrame({'name': [], 'team': [], 'league': []})
+
+def load_team_data(engine: Engine, selected_split: str):
+    """
+        Fetches aggregated team stats from the 'teams_staging' table,
+        filtering for teams present in the loaded player map.
+
+        This function leverages st.cache_data to only query the database once.
+        """
+    # 1. Get the DataFrame containing player/team/league mapping
+    teams = TEAM_MAP
+
+    # 2. Extract unique team names from the map
+
+
+    if not teams:
+        st.error("No teams found in the player map. Cannot load team data.")
+        return pd.DataFrame()
+
+    # 3. Format the list for the SQL IN clause
+    teams_list_str = ', '.join([f"'{team}'" for team in teams])
+
+    # 4. Construct the SQL statement
+    target_season = 'S15'
+    statement = f"""
+            SELECT * FROM teams_staging
+            WHERE name IN ({teams_list_str})
+            AND season = '{target_season}'
+            AND split = '{selected_split}';
+        """
+
+    # 5. Execute the query and load into DataFrame
+    try:
+        team_df = pd.read_sql(statement, engine)
+
+        # Simple cleaning and return
+        team_df = team_df.fillna(0)  # Fill NaN for numeric stats
+        return team_df
+
+    except Exception as e:
+        st.error(f"Error executing SQL query for team data: {e}")
+        return pd.DataFrame()
 
 def load_and_prepare_data(engine: Engine, selected_role: str, selected_split: str):
     """
@@ -61,7 +109,7 @@ def load_and_prepare_data(engine: Engine, selected_role: str, selected_split: st
     names_list_str = ', '.join([f"'{name}'" for name in player_names])
 
     target_season = 'S15'
-    statement = f"""
+    player_statement = f"""
         SELECT * FROM players_staging
         WHERE season = '{target_season}'
         AND name IN ({names_list_str})  
@@ -69,7 +117,7 @@ def load_and_prepare_data(engine: Engine, selected_role: str, selected_split: st
     """
 
     try:
-        player_df = pd.read_sql(statement, engine)
+        player_df = pd.read_sql(player_statement, engine)
     except Exception as e:
         print(f"Error executing SQL query: {e}")
         # Fallback in case of DB connection or SQL execution failure

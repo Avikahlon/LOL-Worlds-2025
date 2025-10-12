@@ -5,9 +5,10 @@ from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
 # Importing the independent modules
-from data_loader import load_and_prepare_data, ROLE_PLAYERS_MAP
+from data_loader import load_and_prepare_data, ROLE_PLAYERS_MAP, load_team_data
 from graphs.rankings import show_rankings
 from graphs.bubble_chart import show_bubble_charts
+from graphs.team_charts import show_team_performance_charts
 from graphs.eff_chart import show_efficiency_chart
 from graphs.early_game_chart import show_early_game_chart
 from graphs.impact_chart import show_impact_chart
@@ -94,7 +95,8 @@ def get_data(_engine, role: str, split: str):
     # Load and prepare data using the dynamic function
     return load_and_prepare_data(_engine, role, split)
 
-
+#TODO: add same for teams, when a certain team is selected show all individual players and team
+#TODO: add other team stats like objectives, early game aggression(@15)
 def main():
     """The main function to run the Streamlit app."""
 
@@ -106,7 +108,7 @@ def main():
     st.sidebar.header("Data Source & Selection")
 
     # Get the Database Engine
-    engine = get_db_engine()
+    engine = get_db_engine_()
     if engine is None:
         st.error("Cannot proceed without a successful database connection.")
         return
@@ -130,6 +132,7 @@ def main():
     #Load Data based on the selected role
     df_filtered = get_data(engine, selected_role, selected_split)
     df_all = get_data(engine, "All", "ALL")
+    df_teams = load_team_data(engine, selected_split)
 
     # Check if data was successfully loaded
     if df_filtered.empty or df_filtered.shape[0] == 0:
@@ -148,7 +151,8 @@ def main():
         "Early Game & Vision Control",
         "Player Origins",
         "Other charts",
-        "Pickems Analysis"
+        "Pickems Analysis",
+        "Future Additions"
     ])
 
     # --- Display content based on the selected section ---
@@ -197,5 +201,14 @@ def main():
     elif options == "Pickems Analysis":
         show_pickems_page(df_filtered, engine)
 
-main()
+    elif options == "Future Additions":
+        st.header("Future Additions")
+        st.subheader("I want to keep building this into more than just Worlds Analysis and add more data/visulations to it."
+                     " But for now I will keep adding data about the Teams playing in Worlds showcasing teams early game "
+                     "aggression, objective control and how these statistics can show how a team plays and how the changes"
+                     "in game affects teams play-style and also how teams compare domestically and on international stage")
+        st.warning("Some data is not available right now or is missing. So I am not able to build a lot relating to teams.")
+        show_team_performance_charts(df_teams)
 
+
+main()
