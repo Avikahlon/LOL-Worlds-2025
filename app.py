@@ -5,8 +5,9 @@ from sqlalchemy import create_engine
 import os
 from dotenv import load_dotenv
 # Importing the independent modules
-from data_loader import load_and_prepare_data, ROLE_PLAYERS_MAP, load_team_data
+from data_loader import load_and_prepare_data, ROLE_PLAYERS_MAP, load_team_data, load_match_data
 from graphs.rankings import show_rankings
+from graphs.compare_page import compare_page
 from graphs.bubble_chart import show_bubble_charts
 from graphs.team_charts import show_team_performance_charts
 from graphs.eff_chart import show_efficiency_chart
@@ -133,6 +134,7 @@ def main():
     df_filtered = get_data(engine, selected_role, selected_split)
     df_all = get_data(engine, "All", "ALL")
     df_teams = load_team_data(engine, selected_split)
+    df_matches = load_match_data(engine)
 
     # Check if data was successfully loaded
     if df_filtered.empty or df_filtered.shape[0] == 0:
@@ -152,6 +154,7 @@ def main():
         "Player Origins",
         "Other charts",
         "Teams Page",
+        "Team Comparison",
         "Pickems Analysis",
         "Future Additions"
     ])
@@ -207,6 +210,9 @@ def main():
         st.header("Teams Page")
         st.warning("Select a split other than ALL to see charts")
         show_team_performance_charts(df_teams)
+
+    elif options == "Team Comparison":
+        compare_page(df_matches)
 
     elif options == "Future Additions":
         st.header("Future Additions")

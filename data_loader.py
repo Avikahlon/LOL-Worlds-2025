@@ -180,3 +180,21 @@ def load_and_prepare_data(engine: Engine, selected_role: str, selected_split: st
         df_cleaned = df_cleaned.drop(columns=['team'])
 
     return df_cleaned
+
+def load_match_data(engine):
+
+    names_list_str = ', '.join([f"'{name}'" for name in TEAM_MAP])
+
+    statement = f"""
+        SELECT * FROM matches_staging
+        WHERE winner IN ({names_list_str})
+        OR winner IN ({names_list_str});
+    """
+
+    try:
+        matches_df = pd.read_sql(statement, engine)
+    except Exception as e:
+        print(f"Error executing SQL query: {e}")
+        return pd.DataFrame()
+
+    return matches_df

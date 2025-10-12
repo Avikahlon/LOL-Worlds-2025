@@ -6,12 +6,12 @@ WORLDS_TEAMS_DATA: Dict[str, Any] = {
         "image": "images/lck.png",
         "teams": [
             {
-                "name": "Gen.G",
+                "name": "Gen.G eSports",
                 "logo": "images/geng.png",
                 "summary": "Strongest team entering Worlds 2025, winning **MSI 2025** and completely dominating the LCK season. They secured the 1st seed after losing only two domestic games all year.",
             },
             {
-                "name": "Hanwha Life Esports (HLE)",
+                "name": "Hanwha Life eSports",
                 "logo": "images/hle.png",
                 "summary": "Winners of **First Stand 2025** and the **LCK Cup**, they looked incredibly promising early in the year. Despite missing MSI, they finished the LCK season as the 2nd seed.",
             },
@@ -31,22 +31,22 @@ WORLDS_TEAMS_DATA: Dict[str, Any] = {
         "image": "images/lpl.png",
         "teams": [
             {
-                "name": "Bilibili Gaming (BLG)",
+                "name": "Bilibili Gaming",
                 "logo": "images/blg.png",
                 "summary": "The **LPL Grand Finals Champion** and likely the strongest Chinese team entering Worlds. They secured the title despite looking inconsistent throughout the year, redeeming an earlier MSI 2025 loss to AL.",
             },
             {
-                "name": "Top Esports (TES)",
+                "name": "Top Esports",
                 "logo": "images/tes.png",
                 "summary": "Consistent finalists, securing **2nd place in the LPL Grand Finals**. Known for often losing high-stakes final matches and carry a reputation for potentially 'choking' on the international stage, having missed MSI.",
             },
             {
-                "name": "Anyone's Legend (AL)",
+                "name": "Anyone s Legend",
                 "logo": "images/al.png",
                 "summary": "The **early-season kings**, winning the Demacia Cup and showing immense promise at MSI where they nearly defeated GenG and T1. A late-season dip saw them miss the LPL Grand Finals, but they remain a high seed.",
             },
             {
-                "name": "Invictus Gaming (IG)",
+                "name": "Invictus Gaming",
                 "logo": "images/ig.png",
                 "summary": "A mid-tier team for much of the year, IG possesses a solid core with high individual ceilings. They secured the **4th seed** and must face T1 in the Worlds Qualifying Match to secure their final tournament spot.",
             },
@@ -61,7 +61,7 @@ WORLDS_TEAMS_DATA: Dict[str, Any] = {
                 "summary": "Europe's strongest team. Finished 2nd in the Winter and Spring Splits before convincingly winning the **Summer Split**. Despite an early exit at MSI, they are the LEC's best hope.",
             },
             {
-                "name": "MKOI",
+                "name": "Movistar KOI",
                 "logo": "images/mkoi.png",
                 "summary": "The surprising **LEC Spring Split Champions**. They looked dominant for a time but had an early MSI exit and were eliminated by G2 in the Summer Split, securing a 2nd place finish",
             },
@@ -81,7 +81,7 @@ WORLDS_TEAMS_DATA: Dict[str, Any] = {
                 "summary": "The clear **best team in the region**, winning every LTA Split this year. They are considered by many to be the strongest Western team and performed well at MSI, and also the team that nearly defeated Gen.G. last Worlds",
             },
             {
-                "name": "Vivo Keyd Stars (VK)",
+                "name": "Vivo Keyd Stars",
                 "logo": "images/vkd.png",
                 "summary": "The **CBLOL (LTA South) Champion** who secured 2nd place overall in the LTA Championship. Lost the final to FlyQuest but represent a strong regional force entering the tournament.",
             },
@@ -96,12 +96,12 @@ WORLDS_TEAMS_DATA: Dict[str, Any] = {
         "image": "images/lcp.png",
         "teams": [
             {
-                "name": "CTBC Flying Oyster (CFO)",
+                "name": "CTBC Flying Oyster",
                 "logo": "images/cfo.png",
                 "summary": "The best team in the PCS all year. Showed impressive international form at MSI 2025, taking the then-in-form T1 to five games, highlighting their potential with exciting young players.",
             },
             {
-                "name": "Team Secret Whales (TSW)",
+                "name": "Team Secret Whales",
                 "logo": "images/tsw.png",
                 "summary": "The consistent second-best team in the PCS, always finishing just behind CFO. Secured their Worlds spot through consistent seasonal performance and stability.",
             },
