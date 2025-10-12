@@ -21,11 +21,23 @@ METRIC_GROUPS = {
     "Efficiency & Economy": {
         'dpm': 'DPM',
         'gpm': 'GPM',
-        'csm': 'CSM',
+        'cspm': 'CSPM',
         'gdm': 'Gold Diff/Min',
     }
 }
 
+REGION_MAP = {
+    "Custom Selection": None, # Default option to enable manual multiselect
+    "All Teams": None, # Will select all teams available
+    "China (LPL)": ["CN"],
+    "Korea (LCK)": ["KR"],
+    "Europe (LEC)": ["EUW"],
+    # Grouping NA and LAT into Americas
+    "Americas": ["NA", "LAT"],
+    # Grouping Taiwan and Vietnam into Asia Pacific
+    "Asia Pacific": ["TW", "VN"]
+}
+REGION_OPTIONS = list(REGION_MAP.keys())
 
 def show_team_performance_charts(df_teams: pd.DataFrame):
     """
@@ -40,26 +52,59 @@ def show_team_performance_charts(df_teams: pd.DataFrame):
         st.warning("Team data is not available. Please ensure data handler is loading 'teams_staging'.")
         return
 
-    # --- 1. Shared Team Selection ---
-    all_teams = df_teams['name'].unique().tolist()
-
-    sort_col = 'kills_per_game' if 'kills_per_game' in df_teams.columns else df_teams.columns[0]
-    default_teams = df_teams.sort_values(
-        by=sort_col, ascending=False
-    )['name'].head(10).tolist()
-
-    selected_teams = st.multiselect(
-        "Select teams to compare (Applies to all charts below):",
-        options=all_teams,
-        default=default_teams,
-        key='all_team_charts_select'
+    group_filter = st.selectbox(
+        "Compare teams by grouping:",
+        options=REGION_OPTIONS,
+        index=0  # Default to Custom Selection
     )
 
-    if len(selected_teams) < 1:
-        st.warning("Please select at least one team for analysis.")
+    all_teams = df_teams['name'].unique().tolist()
+
+    teams_to_show = []
+
+    if group_filter == "Custom Selection":
+        is_multiselect_disabled = False
+        sort_col = 'kills_per_game' if 'kills_per_game' in df_teams.columns else df_teams.columns[0]
+        default_teams = df_teams.sort_values(
+            by=sort_col, ascending=False
+        )['name'].head(10).tolist()
+
+        # Multiselect is enabled and controls the list
+        selected_teams = st.multiselect(
+            "Select teams to compare (Applies to all charts below):",
+            options=all_teams,
+            default=default_teams,
+            key='all_team_charts_select',
+            disabled=is_multiselect_disabled
+        )
+        teams_to_show = selected_teams
+
+    else:
+        is_multiselect_disabled = True
+        st.caption(f"Showing all teams from the '{group_filter}' region(s).")
+
+        # Get the list of region codes from the map
+        region_codes = REGION_MAP[group_filter]
+
+        if region_codes is None or group_filter == "All Teams":
+            # Show ALL available teams
+            teams_to_show = all_teams
+        else:
+            # Filter by the specified list of region codes (requires 'league' column)
+            if 'region' in df_teams.columns:
+                # UPDATED: Use isin() to filter by the list of region codes
+                teams_to_show = df_teams[df_teams['region'].isin(region_codes)]['name'].unique().tolist()
+            else:
+                st.error(
+                    f"Error: Cannot filter by region '{group_filter}'. 'league' column is missing from team data. The codes expected were: {region_codes}")
+                return
+
+    if len(teams_to_show) < 1:
+        st.warning(f"No teams selected or found for the current filter: **{group_filter}**.")
         return
 
-    df_filtered = df_teams[df_teams['name'].isin(selected_teams)].copy()
+    # Filter the DataFrame using the determined list of teams
+    df_filtered = df_teams[df_teams['name'].isin(teams_to_show)].copy()
 
     # Fill NaN values with 0 for metrics being plotted
     df_filtered = df_filtered.fillna(0)
@@ -104,10 +149,10 @@ def show_team_performance_charts(df_teams: pd.DataFrame):
         x='gpm',
         y='dpm',
         color='name',
-        size='gdm',  # Use Gold Difference per minute for bubble size
-        hover_data=['name', 'gdm'],
+        size='cspm',  # Use Gold Difference per minute for bubble size
+        hover_data=['name', 'cspm', 'gdm'],
         size_max=45,
-        title='DPM vs. GPM (Bubble size = Gold Difference per Minute)',
+        title='DPM vs. GPM (Bubble size = CS per Minute)',
         labels={'gpm': eff_metrics['gpm'], 'dpm': eff_metrics['dpm']},
         template="plotly_dark"
     )
