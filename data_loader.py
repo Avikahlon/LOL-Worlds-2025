@@ -22,7 +22,7 @@ TEAM_MAP = [
         'Gen.G eSports', 'T1', 'KT Rolster', 'Hanwha Life eSports',
         'Bilibili Gaming', 'Top Esports', 'Anyone s Legend', 'Invictus Gaming',
         'G2 Esports', 'Fnatic', 'Movistar KOI', '100 Thieves', 'FlyQuest',
-        'Vivo Keyd Stars', 'Team Secret Whales', 'CTBC Flying Oysters', 'PSG Talon'
+        'Vivo Keyd Stars', 'Team Secret Whales', 'CTBC Flying Oyster', 'PSG Talon'
 ]
 
 # @st.cache_data
