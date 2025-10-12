@@ -44,10 +44,9 @@ def show_team_performance_charts(df_teams: pd.DataFrame):
     all_teams = df_teams['name'].unique().tolist()
 
     sort_col = 'kills_per_game' if 'kills_per_game' in df_teams.columns else df_teams.columns[0]
-    # CHANGED: Use 'name' instead of 'team_name'
     default_teams = df_teams.sort_values(
         by=sort_col, ascending=False
-    )['name'].head(5).tolist()
+    )['name'].head(10).tolist()
 
     selected_teams = st.multiselect(
         "Select teams to compare (Applies to all charts below):",

@@ -199,7 +199,12 @@ def main():
         show_all_rankings(df_filtered)
 
     elif options == "Pickems Analysis":
+        st.header("My Pickems")
         show_pickems_page(df_filtered, engine)
+
+    elif options == "Teams Overview":
+        st.header("Teams Overview")
+        show_team_performance_charts(df_teams)
 
     elif options == "Future Additions":
         st.header("Future Additions")
@@ -208,7 +213,6 @@ def main():
                      "aggression, objective control and how these statistics can show how a team plays and how the changes"
                      "in game affects teams play-style and also how teams compare domestically and on international stage")
         st.warning("Some data is not available right now or is missing. So I am not able to build a lot relating to teams.")
-        show_team_performance_charts(df_teams)
 
 
 main()
