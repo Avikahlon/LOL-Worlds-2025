@@ -109,7 +109,7 @@ def main():
     st.sidebar.header("Data Source & Selection")
 
     # Get the Database Engine
-    engine = get_db_engine_()
+    engine = get_db_engine()
     if engine is None:
         st.error("Cannot proceed without a successful database connection.")
         return
