@@ -37,6 +37,7 @@ REGION_MAP = {
     # Grouping Taiwan and Vietnam into Asia Pacific
     "Asia Pacific": ["TW", "VN"]
 }
+
 REGION_OPTIONS = list(REGION_MAP.keys())
 
 def show_team_performance_charts(df_teams: pd.DataFrame):

@@ -2,7 +2,20 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.express as px
-import numpy as np
+
+REGION_MAP = {
+    "Custom Selection": None, # Default option to enable manual multiselect
+    "All Teams": None, # Will select all teams available
+    "China (LPL)": ["CN"],
+    "Korea (LCK)": ["KR"],
+    "Europe (LEC)": ["EUW"],
+    # Grouping NA and LAT into Americas
+    "Americas": ["NA", "LAT"],
+    # Grouping Taiwan and Vietnam into Asia Pacific
+    "Asia Pacific": ["TW", "VN"]
+}
+
+REGION_OPTIONS = list(REGION_MAP.keys())
 
 def plot_single_bubble_chart(df: pd.DataFrame, x: str, y: str, size: str, title: str, xlabel: str, ylabel: str):
     """Helper function to plot a single bubble chart."""
@@ -35,6 +48,12 @@ def show_bubble_charts(df: pd.DataFrame, selected_role: str):
     # 1. Get all unique groups (Teams or Leagues) present in the data
     all_groups = df[color_variable].unique().tolist()
     all_groups.sort()  # Sort alphabetically for clean display
+
+    group_filter = st.selectbox(
+        "Compare teams by grouping:",
+        options=REGION_OPTIONS,
+        index=0  # Default to Custom Selection
+    )
 
     selected_groups = st.multiselect(
         label=f"Select specific {legend_title}s to display:",
@@ -69,7 +88,7 @@ def show_bubble_charts(df: pd.DataFrame, selected_role: str):
         hover_data=['team_name'],# Show player name on hover
         size_max=45,  # Max size for bubbles
         opacity=0.8,
-        title=f'KDA vs. Winrate (N={n_groups} {title_group}s)'
+        title=f'KDA vs. Winrate (N={n_groups} {title_group}s), Size = Games Played'
     )
 
     # Update layout for clearer axis labels

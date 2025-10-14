@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 # Importing the independent modules
 from data_loader import load_and_prepare_data, ROLE_PLAYERS_MAP, load_team_data, load_match_data
 from graphs.rankings import show_rankings
-from graphs.compare_page import compare_page
+from graphs.compare_page import compare_page, show_team_stats
 from graphs.bubble_chart import show_bubble_charts
 from graphs.team_charts import show_team_performance_charts
 from graphs.eff_chart import show_efficiency_chart
@@ -212,7 +212,7 @@ def main():
         show_team_performance_charts(df_teams)
 
     elif options == "Team Comparison":
-        compare_page(df_matches)
+        compare_page(df_matches, df_teams)
 
     elif options == "Future Additions":
         st.header("Future Additions")

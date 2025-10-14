@@ -1,6 +1,14 @@
 import streamlit as st
 import pandas as pd
 from team_overview import WORLDS_TEAMS_DATA
+from typing import Dict, Any, List
+
+all_teams = [
+    "100 Thieves", "Anyone s Legend", "Bilibili Gaming", "CTBC Flying Oyster",
+    "FlyQuest", "Fnatic", "G2 Esports", "Gen.G eSports", "Hanwha Life eSports",
+    "Invictus Gaming", "KT Rolster", "Movistar KOI", "PSG Talon", "T1",
+    "Team Secret Whales", "Top Esports", "Vivo Keyd Stars"
+]
 
 def get_last_n_head_to_head(df_matches: pd.DataFrame, team1: str, team2: str):
     """
@@ -46,15 +54,57 @@ def get_last_n_head_to_head(df_matches: pd.DataFrame, team1: str, team2: str):
     # Return the last N matches
     return df_h2h_sorted
 
+def show_team_stats(df: pd.DataFrame, team_a:str, team_b:str):
 
-def compare_page(df: pd.DataFrame):
+    cols = {
+        'kills_per_game': 'Kills',
+        'deaths_per_game': 'Deaths',
+        'fb_pct': 'First Blood %',
+        'ft_pct': 'First Turret %',
+        'gd_at15':'Gold Diff at 15',
+        'td_at15': 'Tower Diff at 15',
+        'fos_pct': 'Feats of Strength %',
+        'dpm': 'Damage Per Minute',
+        'gpm': 'Gold Per Minute',
+        'cspm': 'CS Per Minute',
+        'gdm': 'Gold Diff/Min',
+        'baron_per_game': 'Barons/Game',
+        'drags_per_game': 'Dragons/Game',
+        'plates_per_game': 'Plates/Game',
+        'vg_per_game': 'Void Grubs/Game',
+    }
 
-    all_teams = [
-        "100 Thieves", "Anyone s Legend", "Bilibili Gaming", "CTBC Flying Oyster",
-        "FlyQuest", "Fnatic", "G2 Esports", "Gen.G eSports", "Hanwha Life eSports",
-        "Invictus Gaming", "KT Rolster", "Movistar KOI", "PSG Talon", "T1",
-        "Team Secret Whales", "Top Esports", "Vivo Keyd Stars"
-    ]
+    df_a_row = df[df['name'] == team_a]
+    df_b_row = df[df['name'] == team_b]
+
+    combined_data: List[Dict[str, Any]] = []
+
+    # 2. Iterate through metrics, extract raw value, and combine
+    for df_col, display_name in cols.items():
+        # Team A processing
+        value_a = df_a_row[df_col].values
+
+        # Team B processing
+        value_b = df_b_row[df_col].values
+
+        # Build the combined dictionary with dynamic team names as keys
+        combined_data.append({
+            f"{team_a}": value_a,  # Column Name is Team A's name
+            'Metric': display_name,
+            f"{team_b}": value_b  # Column Name is Team B's name
+        })
+
+    # 3. Create the final combined DataFrame
+    df_stats_combined = pd.DataFrame(combined_data)
+
+    # 4. Ensure column order is exactly as requested: Team A Value, Metric, Team B Value
+    df_stats_combined = df_stats_combined[[team_a, 'Metric', team_b]]
+
+    return df_stats_combined
+
+
+def compare_page(df_matches: pd.DataFrame, df_teams: pd.DataFrame):
+
     all_teams.sort()
 
     col_t1, col_t2 = st.columns(2)
@@ -65,7 +115,8 @@ def compare_page(df: pd.DataFrame):
 
     if team_a and team_b and team_a != team_b:
         # Get last 5 matches
-        h2h_data = get_last_n_head_to_head(df, team_a, team_b)
+        h2h_data = get_last_n_head_to_head(df_matches, team_a, team_b)
+        team_stats = show_team_stats(df_teams, team_a, team_b)
 
         image_team_a = "https://placehold.co/50x50/cccccc/000000?text=LOGO"
         image_team_b = "https://placehold.co/50x50/cccccc/000000?text=LOGO"
@@ -125,6 +176,7 @@ def compare_page(df: pd.DataFrame):
                 st.subheader(team_b)
                 st.metric(label='Series (Games)', value=f"{wins_b}({ind_game_wins_b})")
 
+            st.table(team_stats)
             display_cols = ['date', 'tournament_name', 'H2H Score', 'match_type']
             st.table(h2h_data[display_cols].rename(columns={
                 'tournament_name': 'Tournament',
