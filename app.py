@@ -39,7 +39,7 @@ def get_db_engine():
     #Check for missing secrets first
     for key in required_secrets:
         if key not in st.secrets:
-            st.error(f"Missing required secret key: '{key}'. Please ensure it is added to your Streamlit secrets.")
+            st.error(f"Missing required secret key. Please ensure it is added to your Streamlit secrets.")
             return None
 
     try:
@@ -56,7 +56,7 @@ def get_db_engine():
 
     except Exception as e:
         # Display an error if the connection fails
-        st.sidebar.error(f"DB Connection Failed: Check secrets, URL format, or firewall. Error: {e}")
+        st.sidebar.error(f"DB Connection Failed: Check secrets, URL format, or firewall. Error:")
         return None
 
 
@@ -109,7 +109,7 @@ def main():
     st.sidebar.header("Data Source & Selection")
 
     # Get the Database Engine
-    engine = get_db_engine()
+    engine = get_db_engine_()
     if engine is None:
         st.error("Cannot proceed without a successful database connection.")
         return
@@ -221,6 +221,5 @@ def main():
                      "aggression, objective control and how these statistics can show how a team plays and how the changes"
                      "in game affects teams play-style and also how teams compare domestically and on international stage")
         st.warning("Some data is not available right now or is missing. So I am not able to build a lot relating to teams.")
-
 
 main()

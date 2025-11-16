@@ -6,13 +6,13 @@ import plotly.express as px
 REGION_MAP = {
     "Custom Selection": None, # Default option to enable manual multiselect
     "All Teams": None, # Will select all teams available
-    "China (LPL)": ["CN"],
-    "Korea (LCK)": ["KR"],
-    "Europe (LEC)": ["EUW"],
+    "China (LPL)": ["LPL"],
+    "Korea (LCK)": ["LCK"],
+    "Europe (LEC)": ["LEC"],
     # Grouping NA and LAT into Americas
-    "Americas": ["NA", "LAT"],
+    "Americas": ["LTA"],
     # Grouping Taiwan and Vietnam into Asia Pacific
-    "Asia Pacific": ["TW", "VN"]
+    "Asia Pacific": ["LCP"]
 }
 
 REGION_OPTIONS = list(REGION_MAP.keys())
@@ -55,17 +55,49 @@ def show_bubble_charts(df: pd.DataFrame, selected_role: str):
         index=0  # Default to Custom Selection
     )
 
-    selected_groups = st.multiselect(
-        label=f"Select specific {legend_title}s to display:",
-        options=all_groups,
-        default=all_groups  # Default to selecting all groups
-    )
+    all_players = df['name'].unique().tolist()
+    data_to_show = []
 
-    if not selected_groups:
-        st.warning(f"Please select at least one {legend_title} to display the charts.")
-        return  # Stop execution if no groups are selected
+    if group_filter == "Custom Selection":
+        is_multiselect_disabled = False
 
-    df_filtered = df[df[color_variable].isin(selected_groups)]
+        selected_groups = st.multiselect(
+            label=f"Select specific {legend_title}s to display:",
+            options=all_groups,
+            default=all_groups  # Default to selecting all groups
+        )
+
+        data_to_show = selected_groups
+
+        if not selected_groups:
+            st.warning(f"Please select at least one {legend_title} to display the charts.")
+            return  # Stop execution if no groups are selected
+
+    else:
+        is_multiselect_disabled = True
+        st.caption("AA")
+
+        region_codes = REGION_MAP[group_filter]
+
+        if region_codes is None or group_filter == "All Teams":
+            # Show ALL available teams
+            data_to_show = all_players
+        else:
+            # Filter by the specified list of region codes (requires 'league' column)
+            if 'league' in df.columns:
+                # UPDATED: Use isin() to filter by the list of region codes
+                data_to_show = df[df ['league'].isin(region_codes)]['name'].unique().tolist()
+            else:
+                st.error(
+                    f"Error: Cannot filter by region '{group_filter}'. 'league' column is missing from team data. The codes expected were: {region_codes}")
+                return
+
+    if len(data_to_show) < 1:
+        st.warning(f"No teams selected or found for the current filter: **{group_filter}**.")
+        return
+
+    # Filter the DataFrame using the determined list of teams
+    df_filtered = df[df['name'].isin(data_to_show)].copy()
 
     # Check if data exists after filtering
     if df_filtered.empty:
